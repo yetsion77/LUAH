@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק המילים המקשרות</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>המילה המקשרת</h1>
+            <div class="timer-container">
+                <span id="timer">00:00</span>
+            </div>
+        </header>
+
+        <div id="game-grid" class="grid">
+            <!-- Grid items will be generated here -->
+        </div>
+
+        <div id="status-message" class="hidden"></div>
+    </div>
+
+    <!-- Input Modal -->
+    <div id="input-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-clue">המילה: ...</h2>
+            <p class="instruction">מה המילה שמתחברת?</p>
+            
+            <div class="input-group">
+                <input type="text" id="answer-input" placeholder="הקלד תשובה..." autocomplete="off">
+                <button id="submit-btn">בדוק</button>
+            </div>
+            
+            <div class="hint-section">
+                <button id="hint-btn" class="secondary-btn">קבל רמז (אות ראשונה של המקשרת)</button>
+                <p id="hint-text" class="hidden"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div id="win-modal" class="modal hidden">
+        <div class="modal-content win-content">
+            <h2>כל הכבוד!</h2>
+            <p>סיימת את הלוח בזמן:</p>
+            <p id="final-time" class="time-display">00:00</p>
+            <button id="restart-btn" class="primary-btn">משחק חדש</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
