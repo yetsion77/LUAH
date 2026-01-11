@@ -83,12 +83,16 @@
 
             <div class="input-group">
                 <input type="text" id="answer-input" placeholder="הקלד תשובה..." autocomplete="off">
+                <p id="error-message" class="hidden"></p>
                 <button id="submit-btn">בדוק</button>
             </div>
 
             <div class="hint-section">
                 <button id="hint-btn" class="secondary-btn">קבל רמז (אות ראשונה של המקשרת)</button>
+                <button id="position-hint-btn" class="secondary-btn" disabled>רמז נוסף: מיקום המילה (ייפתח עוד 2
+                    דקות)</button>
                 <p id="hint-text" class="hidden"></p>
+                <p id="position-hint-text" class="hidden"></p>
             </div>
         </div>
     </div>

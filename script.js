@@ -1,4 +1,4 @@
-const wordTriplets = [
+const allTriplets = [
     { a: "מגדל", b: "פיקוח", c: "נפש" },
     { a: "תות", b: "שדה", c: "קרב" },
     { a: "תיבת", b: "דואר", c: "אלקטרוני" },
@@ -7,7 +7,19 @@ const wordTriplets = [
     { a: "חד", b: "קרן", c: "שמש" },
     { a: "דמי", b: "כיס", c: "אוויר" },
     { a: "משחק", b: "מילים", c: "נרדפות" },
-    { a: "שומר", b: "מסך", c: "עשן" }
+    { a: "שומר", b: "מסך", c: "עשן" },
+    // New additions
+    { a: "דג", b: "זהב", c: "טהור" },
+    { a: "מצב", b: "רוח", c: "פרצים" },
+    { a: "מורה", b: "דרך", c: "המלך" },
+    { a: "שנות", b: "אור", c: "ראשון" },
+    { a: "תפוח", b: "עץ", c: "השדה" },
+    { a: "תמונת", b: "מצב", c: "חירום" },
+    { a: "אסיר", b: "תודה", c: "רבה" },
+    { a: "שואב", b: "אבק", c: "שרפה" },
+    { a: "קר", b: "מזג", c: "אוויר" },
+    { a: "מוצאי", b: "שבת", c: "שלום" },
+    { a: "נווה", b: "מדבר", c: "יהודה" }
 ];
 
 let gameState = [];
@@ -24,9 +36,12 @@ const winModal = document.getElementById('win-modal');
 const welcomeModal = document.getElementById('welcome-modal');
 const modalClue = document.getElementById('modal-clue');
 const answerInput = document.getElementById('answer-input');
+const errorMessage = document.getElementById('error-message');
 const submitBtn = document.getElementById('submit-btn');
 const hintBtn = document.getElementById('hint-btn');
 const hintText = document.getElementById('hint-text');
+const positionHintBtn = document.getElementById('position-hint-btn');
+const positionHintText = document.getElementById('position-hint-text');
 const closeModal = document.querySelector('.close-modal');
 const timerDisplay = document.getElementById('timer');
 const finalTimeDisplay = document.getElementById('final-time');
@@ -42,11 +57,12 @@ function initGame() {
     grid.innerHTML = '';
     winModal.classList.add('hidden');
 
-    // Shuffle logic if we had more words, but for now we use the 9 provided.
-    // However, we need to decide for each one if we show 'a' or 'c'.
+    // Shuffle and pick 9
+    const shuffled = [...allTriplets].sort(() => 0.5 - Math.random());
+    const selectedTriplets = shuffled.slice(0, 9);
 
     // We'll map the triplets to game state objects
-    gameState = wordTriplets.map((triplet, index) => {
+    gameState = selectedTriplets.map((triplet, index) => {
         // Randomly choose hidden side: 0 for show A (hide C), 1 for show C (hide A)
         // Adjusting logic: 
         // User receives a word (A or C). Needs to guess the other one (C or A).
@@ -100,8 +116,18 @@ function openModal(index) {
 
     modalClue.textContent = `המילה: ${shownWord}`;
     answerInput.value = '';
+    errorMessage.classList.add('hidden');
+    errorMessage.textContent = '';
+
+    // Reset hints
     hintText.classList.add('hidden');
     hintText.textContent = '';
+    positionHintText.classList.add('hidden');
+    positionHintText.textContent = '';
+
+    // Check if 2 minutes passed for position hint
+    updatePositionHintState();
+
     inputModal.classList.remove('hidden');
 
     // Focus input after a short delay for mobile keyboard
@@ -136,6 +162,8 @@ function checkAnswer() {
         }
     } else {
         // Incorrect
+        errorMessage.textContent = 'לא נכון, נסה שנית';
+        errorMessage.classList.remove('hidden');
         shakeModal();
     }
 }
@@ -147,6 +175,26 @@ function getHint() {
     const hint = item.b.charAt(0);
     hintText.textContent = `האות הראשונה של המילה המקשרת: ${hint}`;
     hintText.classList.remove('hidden');
+}
+
+function getPositionHint() {
+    if (currentCellIndex === null) return;
+    const item = gameState[currentCellIndex];
+    // item.show is what is SHOWN. 
+    // If shown is 'a' (1st), target is 'c' (3rd).
+    // If shown is 'c' (3rd), target is 'a' (1st).
+
+    let message = "";
+    if (item.show === 'a') {
+        // Shown word is A (First)
+        message = "המילה שלכם היא המילה הראשונה בצירוף";
+    } else {
+        // Shown word is C (Last/Second in the B-C pair logic)
+        message = "המילה שלכם היא המילה השנייה בצירוף";
+    }
+
+    positionHintText.textContent = message;
+    positionHintText.classList.remove('hidden');
 }
 
 function shakeModal() {
@@ -173,6 +221,29 @@ function updateTimer() {
     const minutes = Math.floor(diff / 60).toString().padStart(2, '0');
     const seconds = (diff % 60).toString().padStart(2, '0');
     timerDisplay.textContent = `${minutes}:${seconds}`;
+
+    // Update hint button state live if modal is open
+    if (!inputModal.classList.contains('hidden')) {
+        updatePositionHintState();
+    }
+}
+
+function updatePositionHintState() {
+    if (!startTime) return;
+    const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+    const timeLeft = 120 - timeElapsed;
+
+    if (timeLeft <= 0) {
+        positionHintBtn.disabled = false;
+        positionHintBtn.textContent = "רמז נוסף: מיקום המילה";
+        positionHintBtn.classList.remove('locked');
+    } else {
+        positionHintBtn.disabled = true;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        positionHintBtn.textContent = `רמז נוסף ייפתח בעוד ${m}:${s.toString().padStart(2, '0')}`;
+        positionHintBtn.classList.add('locked');
+    }
 }
 
 function handleWin() {
@@ -193,8 +264,13 @@ submitBtn.onclick = checkAnswer;
 answerInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') checkAnswer();
 });
+answerInput.addEventListener('input', () => {
+    errorMessage.classList.add('hidden');
+});
 
 hintBtn.onclick = getHint;
+positionHintBtn.onclick = getPositionHint;
+
 restartBtn.onclick = () => {
     // Reload to show welcome again or just init? 
     // Usually restart just restarts game, but let's init

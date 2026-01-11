@@ -232,6 +232,15 @@ input[type="text"]:focus {
     box-shadow: 0 0 0 3px rgba(0, 206, 201, 0.2);
 }
 
+#error-message {
+    color: #e74c3c;
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    /* Prevent layout jump */
+}
+
 button {
     padding: 12px 24px;
     border: none;
@@ -265,7 +274,8 @@ button:active {
     margin-top: 20px;
 }
 
-#hint-text {
+#hint-text,
+#position-hint-text {
     margin-top: 15px;
     font-weight: 700;
     color: var(--accent-color);
@@ -273,6 +283,24 @@ button:active {
     background: rgba(253, 121, 168, 0.1);
     padding: 10px;
     border-radius: 10px;
+}
+
+#position-hint-btn {
+    border-color: var(--secondary-color);
+    color: #00b894;
+    transition: all 0.3s;
+}
+
+#position-hint-btn:hover:not(:disabled) {
+    background-color: rgba(80, 227, 194, 0.1);
+}
+
+#position-hint-btn:disabled,
+#position-hint-btn.locked {
+    border-color: #ccc;
+    color: #999;
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .win-content h2 {
