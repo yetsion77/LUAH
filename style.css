@@ -307,6 +307,93 @@ button:active {
     }
 }
 
+
+
+/* Welcome Modal Specifics */
+.welcome-content {
+    max-width: 90%;
+    width: 600px;
+    text-align: center;
+    padding: 30px;
+}
+
+.welcome-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.welcome-header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.coffee-icon {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+.welcome-icon {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.welcome-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: #444;
+}
+
+#start-btn {
+    font-size: 1.3rem;
+    padding: 15px;
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+    .welcome-content {
+        padding: 20px;
+    }
+
+    .welcome-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .welcome-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .welcome-text {
+        font-size: 0.95rem;
+    }
+}
+
 /* Media Queries for tiny screens */
 @media (max-width: 360px) {
     h1 {
